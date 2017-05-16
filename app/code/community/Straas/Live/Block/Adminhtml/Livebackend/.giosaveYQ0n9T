@@ -1,0 +1,117 @@
+<?php
+/**
+ *
+ * Version			: 1.0.4
+ * Edition 			: Community 
+ * Compatible with 	: Magento 1.5.x to latest
+ * Developed By 	: Magebassi
+ * Email			: magebassi@gmail.com
+ * Web URL 			: www.magebassi.com
+ * Extension		: Magebassi Easy Banner slider
+ * 
+ */
+?>
+<?php
+
+class Straas_Live_Block_Adminhtml_Livebackend_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
+  public function __construct()
+  {
+      parent::__construct();
+      $this->setId('livebackendGrid');
+      $this->setDefaultSort('livevideo_id');
+      $this->setDefaultDir('ASC');
+      $this->setSaveParametersInSession(true);
+  }
+
+  protected function _prepareCollection()
+  {
+  //print_r($collection = Mage::getModel('straas_live/live'));
+      $collection = Mage::getModel('live/live')->getCollection();
+      $this->setCollection($collection);
+      return parent::_prepareCollection();
+  }
+
+  protected function _prepareColumns()
+  {
+      $this->addColumn('imageslider_id', array(
+          'header'    => Mage::helper('live')->__('ID'),
+          'align'     =>'right',
+          'width'     => '50px',
+          'index'     => 'imageslider_id',
+      ));
+	  
+	  $this->addColumn('image',array(
+		  'header'    => Mage::helper('live')->__('Banner Image'),
+		  'align'     =>'center',
+          'index'     => 'image',
+		  'filter'    => false,
+		  'sortable'  => false,
+		  'width'	  =>'150',
+          'renderer'  => 'imageslider/adminhtml_renderer_image'	  
+	  )); 
+
+      $this->addColumn('title', array(
+          'header'    => Mage::helper('live')->__('Banner Title'),
+          'align'     =>'left',
+          'index'     => 'title',
+      ));
+	  
+	   $this->addColumn('sort_order', array(
+          'header'    => Mage::helper('live')->__('Sort Order'),
+          'align'     =>'left',
+		  'width'     => '80px',
+          'index'     => 'sort_order',
+      ));
+
+	  /*
+      $this->addColumn('content', array(
+			'header'    => Mage::helper('live')->__('Item Content'),
+			'width'     => '150px',
+			'index'     => 'content',
+      ));
+	  */
+
+      $this->addColumn('status', array(
+          'header'    => Mage::helper('live')->__('Status'),
+          'align'     => 'left',
+          'width'     => '80px',
+          'index'     => 'status',
+          'type'      => 'options',
+          'options'   => array(
+              1 => 'Enabled',
+              2 => 'Disabled',
+          ),
+      ));
+	  
+        $this->addColumn('action',
+            array(
+                'header'    =>  Mage::helper('live')->__('Action'),
+                'width'     => '100',
+                'type'      => 'action',
+                'getter'    => 'getId',
+                'actions'   => array(
+                    array(
+                        'caption'   => Mage::helper('live')->__('Edit'),
+                        'url'       => array('base'=> '*/*/edit'),
+                        'field'     => 'id'
+                    )
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'index'     => 'stores',
+                'is_system' => true,
+        ));
+		
+		$this->addExportType('*/*/exportCsv', Mage::helper('live')->__('CSV'));
+		$this->addExportType('*/*/exportXml', Mage::helper('live')->__('XML'));
+	  
+      return parent::_prepareColumns();
+  }
+
+  public function getRowUrl($row)
+  {
+      return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+  }
+
+}

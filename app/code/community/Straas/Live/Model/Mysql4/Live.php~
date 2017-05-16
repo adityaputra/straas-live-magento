@@ -1,0 +1,9 @@
+<?php
+
+class Straas_Live_Model_Mysql4_Live extends Mage_Core_Model_Mysql4_Abstract
+{
+    public function _construct()
+    {            
+        $this->_init('live/live', 'live_id');
+    }
+}

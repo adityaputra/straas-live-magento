@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Straas_Live>
+      <version>0.1.0</version>
+    </Straas_Live>
+  </modules>
+  <global>
+    <helpers>
+      <live>
+        <class>Straas_Live_Helper</class>
+      </live>
+    </helpers>
+	<blocks>
+	  <live>
+		<class>Straas_Live_Block</class>
+	  </live>
+	</blocks>
+	<models>
+        <straas_live>
+            <!-- This is where we define our model directory -->
+            <class>Straas_Live_Model</class>
+            <!-- Define a resource to create a custom table -->
+            <resourceModel>straas_live_mysql4</resourceModel>
+        </straas_live>
+         
+        <!-- Here's our resource model we'll use to create a database table -->
+        <straas_live_mysql4>
+            <class>Straas_Live_Model_Mysql4</class>
+            <entities>
+                <!-- Let's define our table, we'll call it with the baz name, but the real table is foo_bar_baz -->
+                <!-- After we define our entity, we can call it with our model by calling foo_bar/baz -->
+                <straastoken>
+                    <table>straas_live_straastoken</table>
+                </straastoken>
+            </entities>
+        </straas_live_mysql4>
+    </models>
+  </global>
+  <admin>
+	<routers>
+	  <live>
+	    <use>admin</use>
+		<args>
+		  <module>Straas_Live</module>
+		  <frontName>admin_live</frontName>
+		</args>
+	  </live>
+	</routers>
+  </admin>
+  <adminhtml>
+	<menu>
+	  <live module="live">
+		<title>Straas Live Video</title>
+		<sort_order>100</sort_order>
+		<children>
+		  <livebackend module="live">
+			<title>Live Video Manager</title>
+			<sort_order>0</sort_order>
+			<action>admin_live/adminhtml_livebackend</action>
+		  </livebackend>
+		</children>
+	  </live>
+	</menu>
+	<acl>
+	  <resources>
+		<all>
+		  <title>Allow Everything</title>
+		</all>
+		<admin>
+		  <children>
+			<live translate="title" module="live">
+			  <title>Live</title>
+			  <sort_order>1000</sort_order>
+			  <children>
+		  <livebackend translate="title">
+			<title>Straas</title>
+		  </livebackend>
+			  </children>
+			</live>
+		  </children>
+		</admin>
+	  </resources>
+	</acl>
+	<layout>
+	  <updates>
+		<live>
+		  <file>live.xml</file>
+		</live>
+	  </updates>
+	</layout>
+  </adminhtml>
+</config> 

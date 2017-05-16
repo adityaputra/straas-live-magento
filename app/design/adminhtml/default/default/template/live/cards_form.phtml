@@ -1,0 +1,90 @@
+<?php 
+$_htmlId      = $this->getElement()->getHtmlId();
+$_htmlClass   = $this->getElement()->getClass();
+$_htmlName    = $this->getElement()->getName();
+$_readonly    = $this->getElement()->getReadonly();
+
+//print_r(Mage::registry('straaslive_data')->getLiveId());
+/*
+$collection = Mage::registry('straaslive_data')
+                ->getCards()
+                ->setOrder('sortorder', 'ASC');
+*/
+
+$collection = Mage::registry('straaslive_data')
+                ->getCards();
+$collection = json_decode($collection);
+//print_r($collection);
+
+/*
+$collection = array();
+$card = new stdClass();
+$card->id = "SKU00001";
+$card->sku = "SKU00001";
+$card->start_time = "0243242";
+$card->end_time = "0243248";
+array_push($collection, $card);
+
+$card = new stdClass();
+$card->id = "SKU00002";
+$card->sku = "SKU00002";
+$card->start_time = "0243252";
+$card->end_time = "0243258";
+array_push($collection, $card);
+
+//echo json_encode($collection);
+*/
+
+$_counter = 0;
+?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>jQuery.noConflict();</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js" integrity="sha256-FaYRflg3IJpVUN+JgijEHFUYgsn1wS1xRlcKTIgToIo=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
+<tr>
+    <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
+    <td colspan="10" class="grid hours">
+        <table id="attribute-options-table" class="dynamic-grid rkstorelocator-officehours" cellspacing="0" cellpadding="0"><tbody>
+            <tr>
+                <th><?php echo $this->__('Product SKU') ?></th>
+                <th><?php echo $this->__('Start Time') ?>
+                <th><button id="add_new_option_button" title="Add Option" type="button" class="scalable add"><span><span><span><?php echo $this->__('Add Option') ?></span></span></span></button></th>
+            </tr>
+<?php if(sizeof($collection) > 0) :?>
+<?php foreach ($collection as $_item): ?>
+<tr class="option-row rkstorelocator-officehours-dayrow" id="hour-row-<?php echo $_counter?>">
+    <td><input placeholder="" name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][sku]" value="<?php echo $_item->sku ?>" class="input-text" type="text"></td>
+    <td>
+    	<input name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][start_time]" value="<?php echo $_item->start_time ?>" class="input-text input-timepicker time ui-timepicker-input" autocomplete="off" type="text">
+	</td>
+    <td class="a-left" id="delete_button_container_option_<?php echo $_counter ?>'">
+        <input name="<?php echo $_htmlName; ?>[value][option_<?php echo $_counter ?>][id]" value="<?php echo $_item->id ?>" type="hidden">
+        <input id="delete-row-<?php echo $_counter ?>" type="hidden" class="delete-flag" name="<?php echo $_htmlName; ?>[delete][option_<?php echo $_counter ?>]" value=""/>
+        <button onclick="$('hour-row-<?php echo $_counter ?>').style.display='none'; $('delete-row-<?php echo $_counter ?>').setValue(1);" title="Delete" type="button" class="scalable delete delete-option"><span><span><span>Delete</span></span></span></button>
+    </td>
+</tr>
+<?php
+        $_counter++;
+    endforeach;
+endif;
+?>
+</tbody></table>
+
+<script type="text/javascript">//<![CDATA[
+
+var _form_html_row = '<tr class="option-row rkstorelocator-officehours-dayrow" id="hour-row-{{id}}"><td><input name="<?php echo $_htmlName; ?>[value][option_{{id}}][sku]" value="" class="input-text" type="text"></td><td><input name="<?php echo $_htmlName; ?>[value][option_{{id}}][start_time]" value="" class="input-text input-timepicker time ui-timepicker-input" autocomplete="off" type="text"></td><td class="a-left" id="delete_button_container_option_{{id}}"><input name="<?php echo $_htmlName; ?>[value][option_{{id}}][id]" value="" type="hidden"><input id="delete-row-{{id}}" type="hidden" class="delete-flag" name="<?php echo $_htmlName; ?>[delete][option_{{id}}]" value=""/><button onclick="$(\'hour-row-{{id}}\').style.display=\'none\'; $(\'delete-row-{{id}}\').setValue(1);" title="Delete" type="button" class="scalable delete delete-option"><span><span><span>Delete</span></span></span></button></td></tr>';
+
+var _rkstorelocator_counter = <?php echo $_counter?>;
+
+$('add_new_option_button').observe('click', function(){
+    $('attribute-options-table').insert(_form_html_row.replace(/\{\{id\}\}/ig, _rkstorelocator_counter));
+    _rkstorelocator_counter++;
+    
+    jQuery('.input-timepicker').timepicker({ 'timeFormat': 'H:i:s', 'step':1 });
+});
+
+jQuery('.input-timepicker').timepicker({ 'timeFormat': 'H:i:s', 'step':1 });
+
+//]]></script>
+    </td>
+</tr>

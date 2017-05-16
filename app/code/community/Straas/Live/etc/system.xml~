@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<config>
+	  <tabs>
+		<straas translate="label" module="live">
+            <label>Straas</label>
+            <sort_order>0</sort_order>
+        </straas>
+	  </tabs>
+	  <sections>
+		<straas_general  translate="label" module="live">                    
+		<label>General Configuration</label>
+		<tab>straas</tab>
+		<frontend_type>text</frontend_type>
+		<sort_order>0</sort_order>
+		<show_in_default>1</show_in_default>
+		<show_in_website>1</show_in_website>
+		<show_in_store>1</show_in_store>            
+					<groups>
+				      <straas_general_client translate="label"> 
+					  <label>Client Settings</label>
+					  <frontend_type>text</frontend_type>
+					  <sort_order>0</sort_order>
+					  <show_in_default>1</show_in_default>
+					  <show_in_website>1</show_in_website>
+					  <show_in_store>1</show_in_store>
+				       <fields>
+                          <straas_general_clientid translate="label">
+                            <label>Client ID</label>
+							<frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                          </straas_general_clientid>
+                          <straas_general_clientsecret translate="label">
+                            <label>Client Secret</label>
+							<frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                          </straas_general_clientsecret>
+					   </fields>
+					   </straas_general_client>
+					</groups>
+		</straas_general>
+	  </sections>
+</config>

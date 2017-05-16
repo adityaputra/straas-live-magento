@@ -1,0 +1,43 @@
+<?php
+class Straas_Live_Model_Observer
+{
+ 
+    public function generateToken()
+    {
+        $client_id = Mage::getStoreConfig('straas_general/straas_general_client/straas_general_clientid');
+        $client_secret = Mage::getStoreConfig('straas_general/straas_general_client/straas_general_clientsecret');
+        
+        $url =  Mage::getConfig()->getNode('default/straas/urls/base') . Mage::getConfig()->getNode('default/straas/urls/get_token');
+        
+        $data = array("client_id" => $client_id, "client_secret" => $client_secret);
+        $data_json = json_encode($data);
+                
+        $ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		$result = curl_exec($ch);
+		
+		curl_close($ch);
+        
+        $result = json_decode($result);
+        $token = $result->token;
+        
+        //echo "new : ".$token."</br>";
+        
+        //Mage::getConfig()->saveConfig('default/straas/token/content', $token);
+        Mage::getModel('core/config')->cleanCache();
+        Mage::getModel('core/config')->saveConfig('straas/token/content', $token, 'default');
+        Mage::getModel('core/config')->cleanCache();
+        
+        //echo "conf: ".Mage::getConfig()->getNode('default/straas/token/content');
+        
+        //exit;
+    }
+ 
+}
+?>

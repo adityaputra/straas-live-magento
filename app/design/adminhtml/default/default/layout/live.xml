@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <live_adminhtml_livebackend_index>
+	<reference name="content">
+	  <block type="live/adminhtml_livebackend" name="livebackend"/>
+	</reference>
+  </live_adminhtml_livebackend_index>
+</layout>

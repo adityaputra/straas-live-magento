@@ -1,0 +1,82 @@
+<?php
+class Straas_Live_Adminhtml_LivebackendController extends Mage_Adminhtml_Controller_Action
+{
+
+	protected function _isAllowed()
+	{
+		//return Mage::getSingleton('admin/session')->isAllowed('live/livebackend');
+		return true;
+	}
+
+	public function indexActionN()
+    {
+       $this->loadLayout();
+	   $this->_title($this->__("Straas"));
+	   $this->renderLayout();
+    }
+    protected function _initAction() {
+		$this->loadLayout()
+			->_setActiveMenu('imageslider/items')
+			->_addBreadcrumb(Mage::helper('adminhtml')->__('Banners Manager'), Mage::helper('adminhtml')->__('Banner Manager'));
+		
+		return $this;
+	}   
+ 
+	public function indexAction() {
+	
+		$this->_title($this->__('Straas'))
+			->_title($this->__('Manage live video'));
+		$this->_initAction()
+			->renderLayout();
+	}
+	
+	
+	public function saveAction() {
+
+        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('imageslider')->__('Unable to save Banner Image'));
+        $this->_redirect('*/*/');
+	}
+	
+	public function newAction() {
+		$this->_forward('edit');
+	}	
+	
+	public function editAction() {
+		$id     = $this->getRequest()->getParam('id');
+		$model  = Mage::getModel('live/live')->load($id);
+
+		if ($model->getId() || $id == 0) {
+			$data = Mage::getSingleton('adminhtml/session')->getFormData(true);
+			if (!empty($data)) {
+				$model->setData($data);
+			}
+
+			Mage::register('imageslider_data', $model);
+			
+			$this->_title($this->__('Imageslider'))
+				->_title($this->__('Manage banner'));
+			if ($model->getId()){
+				$this->_title($model->getTitle());
+			}else{
+				$this->_title($this->__('New Banner'));
+			}
+
+			$this->loadLayout();
+			$this->_setActiveMenu('imageslider/items');
+
+			$this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item Manager'), Mage::helper('adminhtml')->__('Item Manager'));
+			$this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item News'), Mage::helper('adminhtml')->__('Item News'));
+
+			$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+
+			$this->_addContent($this->getLayout()->createBlock('imageslider/adminhtml_imageslider_edit'))
+				->_addLeft($this->getLayout()->createBlock('imageslider/adminhtml_imageslider_edit_tabs'));
+
+			$this->renderLayout();
+		} else {
+			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('imageslider')->__('Item does not exist'));
+			$this->_redirect('*/*/');
+		}
+	}
+	
+}
